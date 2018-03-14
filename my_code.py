@@ -8,17 +8,64 @@ import matplotlib.pyplot as plt
 from sklearn.utils import shuffle
 from sklearn.model_selection import GridSearchCV
 
-data_dir = 'input/'
-df_seeds = pd.read_csv(data_dir + 'NCAATourneySeeds.csv')
-df_tour = pd.read_csv(data_dir + 'NCAATourneyCompactResults.csv')
+# win/loss data
+#data_dir = 'input/'
+#df_tour = pd.read_csv(data_dir + 'NCAATourneyCompactResults.csv')
 
-df_seeds.head()
-df_tour.head()
+# change directory to get player data
+data_dir = 'input/Players/'
+df_players_2010 = pd.read_csv(data_dir + 'Players_2010.csv')
+'''
+df_players_2011 = pd.read_csv(data_dir + 'Players_2011.csv')
+df_players_2012 = pd.read_csv(data_dir + 'Players_2012.csv')
+df_players_2013 = pd.read_csv(data_dir + 'Players_2013.csv')
+df_players_2014 = pd.read_csv(data_dir + 'Players_2014.csv')
+df_players_2015 = pd.read_csv(data_dir + 'Players_2015.csv')
+df_players_2016 = pd.read_csv(data_dir + 'Players_2016.csv')
+df_players_2017 = pd.read_csv(data_dir + 'Players_2017.csv')
+df_players_2018 = pd.read_csv(data_dir + 'Players_2018.csv')
+'''
 
-def seed_to_int(seed):
-    #Get just the digits from the seeding. Return as int
-    s_int = int(seed[1:3])
-    return s_int
+def get_avg_name_length():
+    sum = 0
+    size = 0
+    current_TeamID = 0
+    avg_name_lengths = {}
+    for row in df_players_2010.itertuples():
+        if row[3] == current_TeamID:
+            if row[4] != "TEAM":
+                sum += len(row[4])
+                size += 1
+        else:
+            try:
+                avg_name_lengths[current_TeamID] = sum/size
+                sum = len(row[4])
+                size = 1
+                current_TeamID = row[3]
+            except:
+                sum = len(row[4])
+                size = 1
+                current_TeamID = row[3]
+
+    return avg_name_lengths
+
+print(get_avg_name_length())
+
+
+'''
+# remove extra info from win/loss data
+df_tour.drop(labels=['DayNum', 'WScore', 'LScore', 'WLoc', 'NumOT'], inplace=True, axis=1)
+
+# count length of every player on the team's name
+# add lengths and average within years
+# merge lengths with teams
+
+# gets the average name length of the players on the team
+def get_avg_name_length:
+    
+
+
+
 df_seeds['seed_int'] = df_seeds.Seed.apply(seed_to_int)
 df_seeds.drop(labels=['Seed'], inplace=True, axis=1) # This is the string label
 df_seeds.head()
@@ -81,4 +128,4 @@ preds = clf.predict_proba(X_test)[:,1]
 clipped_preds = np.clip(preds, 0.05, 0.95)
 df_sample_sub.Pred = clipped_preds
 df_sample_sub.head()
-
+'''
