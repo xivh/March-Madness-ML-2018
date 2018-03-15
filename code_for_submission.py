@@ -10,10 +10,9 @@ from sklearn.model_selection import GridSearchCV
 
 # win/loss data
 data_dir = 'input/'
-df_tour = pd.read_csv(data_dir + 'NCAATourneyCompactResults2.csv')
+df_tour= pd.read_csv(data_dir + 'NCAATourneyCompactResults.csv')
+df_tour = df_tour.drop(df_tour[(df_tour.Season < 2010)].index)
 
-# change directory to get player data
-data_dir = 'input/Players/'
 df_players_2010 = pd.read_csv(data_dir + 'Players_2010.csv')
 df_players_2011 = pd.read_csv(data_dir + 'Players_2011.csv')
 df_players_2012 = pd.read_csv(data_dir + 'Players_2012.csv')
@@ -104,7 +103,6 @@ plt.plot(X, preds)
 plt.xlabel('Team1 length - Team2 length')
 plt.ylabel('P(Team1 will win)')
 
-data_dir = 'input/'
 # for testing the data
 # df_sample_sub = pd.read_csv(data_dir + 'SampleSubmissionStage1.csv')
 df_sample_sub = pd.read_csv(data_dir + 'SampleSubmissionStage2.csv')
